@@ -46,7 +46,7 @@ function getFtpFileList() {
             port: 21,
             password: "6k0Sb#EXT6jw"
         });
-    })
+    }).catch(error => console.log(error));
 }
 
 
@@ -80,7 +80,7 @@ function importListExcelInDB(files, ftpClient, connection) {
                                 var date = + check_date
                                 date = date / 1000
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(Cgn)
@@ -96,14 +96,14 @@ function importListExcelInDB(files, ftpClient, connection) {
                                     });
 
 
-                                let campaign = await connection
+                                let campaign = connection
                                     .createQueryBuilder()
                                     .select("cgn")
                                     .from(Cgn, "cgn")
                                     .where("cgn.yashi_campaign_id = :id", { id: parseInt(row['Campaign ID']) })
                                     .getOne();
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(CgnData)
@@ -134,7 +134,7 @@ function importListExcelInDB(files, ftpClient, connection) {
                                         }
                                     });
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(Order)
@@ -149,14 +149,14 @@ function importListExcelInDB(files, ftpClient, connection) {
                                         }
                                     });
 
-                                let order = await connection
+                                let order = connection
                                     .createQueryBuilder()
                                     .select("order")
                                     .from(Order, "order")
                                     .where("order.yashi_order_id = :id", { id: parseInt(row['Order ID']) })
                                     .getOne();
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(OrderData)
@@ -187,7 +187,7 @@ function importListExcelInDB(files, ftpClient, connection) {
                                         }
                                     });
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(Creative)
@@ -202,14 +202,14 @@ function importListExcelInDB(files, ftpClient, connection) {
                                         }
                                     });
 
-                                let creative = await connection
+                                let creative = connection
                                     .createQueryBuilder()
                                     .select("creative")
                                     .from(Creative, "creative")
                                     .where("creative.yashi_creative_id = :id", { id: parseInt(row['Creative ID']) })
                                     .getOne();
 
-                                await connection
+                                connection
                                     .createQueryBuilder()
                                     .insert()
                                     .into(CreativeData)
@@ -248,7 +248,7 @@ function importListExcelInDB(files, ftpClient, connection) {
                     });
                     stream.once('close',() => { console.log(file.name, " Closed") });
                 })
-            });
+            }).catch(error => console.log(error));
         }
     })
     return Promise.all(promiseList);
