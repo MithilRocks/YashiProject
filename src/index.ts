@@ -246,10 +246,10 @@ function importListExcelInDB(files, ftpClient, connection) {
                         console.log(file.name, ' file successfully processed')
                         resolve(file.name + ' file successfully processed ')
                     });
-                    stream.once('close',() => { console.log(file.name, " Closed") });
+                    stream.once('close',() => { ftpClient.end(); });
                 })
             }).catch(error => console.log(error));
         }
     })
-    return Promise.all(promiseList);
+    return Promise.all(promiseList).catch(error => console.log(error));
 }
